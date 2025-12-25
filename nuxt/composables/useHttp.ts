@@ -20,7 +20,12 @@ function createHttpComposable<T>(
   options?: HttpUseFetchOptions<T>,
   lazy: boolean = false,
 ) {
-  return lazy ? useLazyFetch<T>(url, options as any) : useFetch<T>(url, options as any);
+  const { $http } = useNuxtApp();
+  const fetchInstance = lazy ? $http : $http;
+
+  return lazy
+    ? useLazyFetch<T>(url, { ...options, $fetch: fetchInstance } as any)
+    : useFetch<T>(url, { ...options, $fetch: fetchInstance } as any);
 }
 
 export function useHttp<T>(
