@@ -50,8 +50,8 @@ export const useAuthStore = defineStore('auth', () => {
     }
   });
 
-  function fetchCsrf(): void {
-    $http('/sanctum/csrf-cookie', {
+  async function fetchCsrf(): Promise<void> {
+    await $http('/sanctum/csrf-cookie', {
       baseURL: config.public.apiBase,
       credentials: 'include',
       headers: { Accept: 'application/json' }
