@@ -24,7 +24,7 @@ Route::get('/', function () {
 });
 
 Route::prefix('api/v1')->group(function () {
-    Route::get('login/{provider}/redirect', [AuthController::class, 'redirect'])->name('login.provider.redirect');
+    Route::get('login/{provider}/redirect', [AuthController::class, 'redirect'])->middleware(['web'])->name('login.provider.redirect');
     Route::get('login/{provider}/callback', [AuthController::class, 'callback'])->middleware(['web'])->name('login.provider.callback');
     Route::post('login', [AuthController::class, 'login'])->middleware(['web', 'throttle:login'])->name('login');
     Route::post('register', [AuthController::class, 'register'])->middleware(['web'])->name('register');

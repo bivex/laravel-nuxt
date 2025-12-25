@@ -27,6 +27,10 @@ class WebAuthService implements AuthServiceContract
     public function logout(Request $request): void
     {
         Auth::logout();
+
+        // Invalidate session to prevent SSR caching issues
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
     }
 
     public function handleCallback(Request $request, User $user): array

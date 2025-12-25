@@ -8,7 +8,7 @@
  * https://github.com/bivex
  *
  * Created: 2025-12-25T11:27:34
- * Last Updated: 2025-12-25T11:29:02
+ * Last Updated: 2025-12-25T11:31:33
  *
  * Licensed under the MIT License.
  * Commercial licensing available upon request.
@@ -118,6 +118,50 @@ class AuthenticationTest extends TestCase
 
         $this->assertNotNull($callbackRoute, 'Social auth callback route should exist');
         $this->assertContains('web', $callbackRoute->middleware(), 'Social auth callback should have web middleware');
+    }
+
+    public function test_oauth_redirect_has_web_middleware_for_session_persistence(): void
+    {
+        // Issue #31: OAuth redirect should have 'web' middleware to maintain session
+        // between redirect to provider and callback from provider
+
+        // Test that the redirect route has web middleware for session persistence
+        $routes = app('router')->getRoutes();
+        $redirectRoute = null;
+
+        foreach ($routes as $route) {
+            if ($route->getName() === 'login.provider.redirect') {
+                $redirectRoute = $route;
+                break;
+            }
+        }
+
+        $this->assertNotNull($redirectRoute, 'OAuth redirect route should exist');
+        $this->assertContains('web', $redirectRoute->middleware(), 'OAuth redirect should have web middleware for session persistence');
+    }
+
+    public function test_session_based_logout_clears_server_session(): void
+    {
+        // Issue #31: SSR logout should clear session on server side
+        // Currently, logout only clears client-side cookies but server-side
+        // session remains, causing SSR to think user is still authenticated
+
+        $user = User::factory()->create();
+
+        // Simulate session-based login
+        $this->actingAs($user, 'web');
+
+        // Verify user is authenticated
+        $this->assertAuthenticated('web');
+
+        // Perform logout
+        $response = $this->postJson('/api/v1/logout');
+
+        $response->assertStatus(200)
+            ->assertJson(['ok' => true]);
+
+        // After logout, session should be cleared
+        $this->assertGuest('web');
     }
 
     public function test_users_can_not_authenticate_with_invalid_password(): void
