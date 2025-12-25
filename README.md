@@ -4,6 +4,7 @@
 
 [![](https://img.shields.io/badge/Laravel-v12-ff2e21.svg)](https://laravel.com)
 [![](https://img.shields.io/badge/nuxt.js-v4-04C690.svg)](https://nuxt.com)
+[![](https://img.shields.io/badge/Bun-v1.3-FFDF37.svg)](https://bun.sh)
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fk2so-dev%2Flaravel-nuxt.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fk2so-dev%2Flaravel-nuxt?ref=badge_shield)
 [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/k2so-dev/laravel-nuxt/laravel.yml)](https://github.com/k2so-dev/laravel-nuxt/actions/workflows/laravel.yml)
 [![CodeQL](https://github.com/k2so-dev/laravel-nuxt/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/k2so-dev/laravel-nuxt/actions/workflows/github-code-scanning/codeql)
@@ -36,6 +37,7 @@ The goal of the project is to create a template for development on Laravel and N
 
  - [**Laravel 12**](https://laravel.com/docs/12.x) and [**Nuxt 4**](https://nuxt.com/)
  - [**Laravel Octane**](https://laravel.com/docs/12.x/octane) supercharges your application's performance by serving your application using high-powered application servers.
+ - [**Bun**](https://bun.sh/) Fast JavaScript runtime with native TypeScript support and optimized package management.
  - [**Laravel Telescope**](https://laravel.com/docs/12.x/telescope) provides insight into the requests coming into your application, exceptions, log entries, database queries, queued jobs, mail, notifications, cache operations, scheduled tasks, variable dumps, and more.
  - [**Laravel Sanctum**](https://laravel.com/docs/12.x/sanctum) Token/Session-based authorization is compatible with **SSR** and **CSR**
  - [**Laravel Socialite**](https://laravel.com/docs/12.x/socialite) OAuth providers
@@ -50,9 +52,18 @@ The goal of the project is to create a template for development on Laravel and N
 
 ## Requirements
 
- - PHP 8.3+ / Node 20+
+ - PHP 8.3+ / [**Bun**](https://bun.sh/) 1.0+ (recommended) or Node 20+
  - **Redis** is required for the [**Throttling with Redis**](https://laravel.com/docs/12.x/routing#throttling-with-redis) feature
  - [**Laravel Octane**](https://laravel.com/docs/12.x/octane) supports 3 operating modes: Swoole (php extension), Roadrunner and FrankenPHP
+
+### Runtime Performance
+
+This project supports both **Node.js** and **Bun** runtimes:
+
+- **Bun** (recommended): 3x faster cold starts, native TypeScript, optimized bundling
+- **Node.js**: Standard runtime with full ecosystem compatibility
+
+To use Bun, install it first: `curl -fsSL https://bun.sh/install | bash`
 
 ## Installation
 ### Standalone
