@@ -11,9 +11,13 @@
     "dev:clean": "nuxt cleanup && nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "api": "php artisan octane:start --watch"
+    "api": "php artisan octane:start --watch",
+    "prepare": "husky",
+    "postinstall": "husky install"
   },
   "devDependencies": {
+    "@commitlint/cli": "^20.2.0",
+    "@commitlint/config-conventional": "^20.2.0",
     "@iconify-json/heroicons": "^1.2.3",
     "@iconify-json/lucide": "^1.2.82",
     "@iconify-json/simple-icons": "^1.2.63",
@@ -23,6 +27,7 @@
     "@pinia/nuxt": "^0.11.3",
     "chokidar": "^5.0.0",
     "dayjs-nuxt": "^2.1.11",
+    "husky": "^9.1.7",
     "nuxt": "^4.2.2",
     "nuxt-security": "^2.5.0",
     "vue": "^3.5.26",
