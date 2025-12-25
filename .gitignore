@@ -58,3 +58,5 @@ rr
 .scannerwork/
 
 sonar-project.properties
+
+scan.sh
