@@ -2,14 +2,15 @@
   "name": "laravel-nuxt",
   "private": true,
   "type": "module",
+  "packageManager": "bun@1.0.0",
   "scripts": {
-    "serve": "node .output/server/index.mjs",
+    "serve": "bun .output/server/index.mjs",
     "build": "nuxi cleanup && nuxi build",
     "cleanup": "nuxi cleanup",
     "dev": "nuxt dev",
+    "dev:clean": "nuxt cleanup && nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare",
     "api": "php artisan octane:start --watch"
   },
   "devDependencies": {

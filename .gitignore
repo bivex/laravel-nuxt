@@ -33,8 +33,11 @@ yarn-error.log
 .cache
 dist
 
-# Node dependencies
+# Node/Bun dependencies
 node_modules
+bun.lockb
+package-lock.json
+yarn.lock
 
 # Logs
 logs
@@ -49,3 +52,5 @@ logs
 .env
 .env.*
 !.env.example
+rr
+.rr.yaml
