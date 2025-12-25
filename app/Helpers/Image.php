@@ -28,9 +28,9 @@ class Image
 
         if ($extension === 'webp') {
             $image->toWebp($quality)->save($target);
-        } else if ($extension === 'jpeg') {
+        } elseif ($extension === 'jpeg') {
             $image->toJpeg($quality)->save($target);
-        } else if ($extension === 'png') {
+        } elseif ($extension === 'png') {
             $image->toPng()->save($target);
         }
     }

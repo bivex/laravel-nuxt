@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Contracts\AuthServiceContract;
 use App\Models\User;
 use App\Models\UserProvider;
 use Illuminate\Auth\Events\PasswordReset;
@@ -10,7 +11,6 @@ use Illuminate\Auth\Events\Verified;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
@@ -18,7 +18,6 @@ use Illuminate\Validation\Rules;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 use Laravel\Socialite\Facades\Socialite;
-use App\Contracts\AuthServiceContract;
 
 class AuthController extends Controller
 {
@@ -58,13 +57,14 @@ class AuthController extends Controller
     /**
      * Redirect to provider for authentication
      */
-    public function redirect(Request $request, string $provider): RedirectResponse
+    public function redirect(string $provider): RedirectResponse
     {
         return Socialite::driver($provider)->stateless()->redirect();
     }
 
     /**
      * Handle callback from provider
+     *
      * @throws \Exception
      */
     public function callback(Request $request, string $provider): View
@@ -98,7 +98,7 @@ class AuthController extends Controller
                 ]);
             }
 
-            $user = new User();
+            $user = new User;
             $user->ulid = Str::ulid()->toBase32();
             $user->avatar = $oAuthUser->picture ?? $oAuthUser->avatar_original ?? $oAuthUser->avatar;
             $user->name = $oAuthUser->name;
@@ -126,6 +126,7 @@ class AuthController extends Controller
 
     /**
      * Login user
+     *
      * @throws ValidationException
      */
     public function login(Request $request): JsonResponse
@@ -181,6 +182,7 @@ class AuthController extends Controller
 
     /**
      * Handle an incoming password reset link request.
+     *
      * @throws ValidationException
      */
     public function sendResetPasswordLink(Request $request): JsonResponse
@@ -210,6 +212,7 @@ class AuthController extends Controller
 
     /**
      * Handle an incoming new password request.
+     *
      * @throws ValidationException
      */
     public function resetPassword(Request $request): JsonResponse
@@ -250,7 +253,7 @@ class AuthController extends Controller
     /**
      * Mark the authenticated user's email address as verified.
      */
-    public function verifyEmail(Request $request, string $ulid, string $hash): JsonResponse
+    public function verifyEmail(string $ulid, string $hash): JsonResponse
     {
         $user = User::where('ulid', $ulid)->first();
 

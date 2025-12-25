@@ -41,6 +41,7 @@ class AuthSwitch extends Command
 
         if ($currentGuard === $guard) {
             $this->info('Authentication guard is already ' . $guard . '!');
+
             return;
         }
 
@@ -52,7 +53,7 @@ class AuthSwitch extends Command
 
         if ($guard === 'web') {
             $this->replaceByPattern(base_path('bootstrap/app.php'), '->statefulApi()', true);
-        } else if ($guard === 'api') {
+        } elseif ($guard === 'api') {
             $this->replaceByPattern(base_path('bootstrap/app.php'), '->statefulApi()', false);
         }
 
@@ -63,7 +64,7 @@ class AuthSwitch extends Command
 
     private function replaceByPattern(string $path, string $pattern, bool $enable): void
     {
-        $content = $contentReplaced = file_get_contents($path);
+        $contentReplaced = file_get_contents($path);
 
         if (!preg_match('@' . preg_quote($pattern) . '@', $content)) {
             $this->fail('Pattern not found in ' . $path);

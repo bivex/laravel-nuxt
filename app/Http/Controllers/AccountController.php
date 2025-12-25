@@ -14,6 +14,8 @@ use Illuminate\Validation\ValidationException;
 
 class AccountController extends Controller
 {
+    private const MAX_LENGTH = 100;
+
     /**
      * Update the user's profile information.
      */
@@ -27,7 +29,7 @@ class AccountController extends Controller
         $user = $request->user();
 
         $request->validate([
-            'name' => ['required', 'string', 'min:3', 'max:100'],
+            'name' => ['required', 'string', 'min:3', 'max:' . self::MAX_LENGTH],
             'email' => ['required', 'email', 'unique:users,email,'.$user->id],
             'avatar' => ['nullable', 'string', Rule::excludeIf($request->avatar === $user->avatar), 'regex:/^avatars\/[a-z0-9]{26}\.([a-z]++)$/i', new TemporaryFileExists],
         ]);
@@ -56,13 +58,14 @@ class AccountController extends Controller
 
     /**
      * Update the user's password.
+     *
      * @throws ValidationException
      */
     public function password(Request $request): JsonResponse
     {
         $request->validate([
-            'current_password' => ['required', 'string', 'min:8', 'max:100'],
-            'password' => ['required', 'string', 'min:8', 'max:100', 'confirmed'],
+            'current_password' => ['required', 'string', 'min:8', 'max:' . self::MAX_LENGTH],
+            'password' => ['required', 'string', 'min:8', 'max:' . self::MAX_LENGTH, 'confirmed'],
         ]);
 
         $user = $request->user();
