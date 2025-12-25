@@ -39,6 +39,11 @@ const { refresh: onSubmit, status: resetStatus } = useHttp<any>("reset-password"
   }
 });
 
+const handleSubmit = async () => {
+  await auth.fetchCsrf();
+  await onSubmit();
+};
+
 useSeoMeta({
   title: 'Reset Password',
 })
@@ -48,7 +53,7 @@ useSeoMeta({
     <h1 class="text-3xl font-black mb-6 leading-tight tracking-tight">Reset Password</h1>
 
     <div class="space-y-4">
-      <UForm ref="form" :state="state" @submit="onSubmit" class="space-y-4">
+      <UForm ref="form" :state="state" @submit="handleSubmit" class="space-y-4">
         <UFormField label="Email" name="email" required>
           <UInput
             v-model="state.email"

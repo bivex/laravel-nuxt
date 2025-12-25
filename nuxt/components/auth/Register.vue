@@ -4,6 +4,7 @@ import type { Form } from "#ui/types";
 const router = useRouter();
 const form = useTemplateRef<Form<any>>('form');
 const toast = useToast();
+const auth = useAuthStore();
 
 const state = reactive({
   name: "",
@@ -38,11 +39,16 @@ const { refresh: onSubmit, status: registerStatus } = useHttp<any>("register", {
     }
   }
 });
+
+const handleSubmit = async () => {
+  await auth.fetchCsrf();
+  await onSubmit();
+};
 </script>
 
 <template>
   <div class="space-y-4">
-    <UForm ref="form" :state="state" @submit="onSubmit" class="space-y-4">
+    <UForm ref="form" :state="state" @submit="handleSubmit" class="space-y-4">
       <UFormField label="Name" name="name" required>
         <UInput v-model="state.name" class="w-full" type="text" autofocus />
       </UFormField>

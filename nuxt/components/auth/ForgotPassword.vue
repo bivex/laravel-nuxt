@@ -3,6 +3,7 @@ import type { Form } from "#ui/types";
 
 const form = useTemplateRef<Form<any>>('form');
 const toast = useToast();
+const auth = useAuthStore();
 
 const state = reactive({
   email: "",
@@ -25,11 +26,16 @@ const { refresh: onSubmit, status: forgotStatus } = useHttp<any>("forgot-passwor
     }
   }
 });
+
+const handleSubmit = async () => {
+  await auth.fetchCsrf();
+  await onSubmit();
+};
 </script>
 
 <template>
   <div class="space-y-4">
-    <UForm ref="form" :state="state" @submit="onSubmit" class="space-y-4">
+    <UForm ref="form" :state="state" @submit="handleSubmit" class="space-y-4">
       <UFormField label="Email" name="email" required>
         <UInput
           v-model="state.email"

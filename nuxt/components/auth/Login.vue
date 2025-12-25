@@ -29,6 +29,11 @@ const { refresh: onSubmit, status: loginStatus } = useHttp<any>("login", {
   }
 });
 
+const handleSubmit = async () => {
+  await auth.fetchCsrf();
+  await onSubmit();
+};
+
 const providers = ref<AuthProviders>(config.public.providers);
 
 async function handleMessage(event: { data: any }): Promise<void> {
@@ -93,7 +98,7 @@ onBeforeUnmount(() => window.removeEventListener("message", handleMessage));
 
     <USeparator label="OR" />
 
-    <UForm ref="form" :state="state" @submit="onSubmit" class="space-y-4">
+    <UForm ref="form" :state="state" @submit="handleSubmit" class="space-y-4">
       <UFormField label="Email" name="email" required>
         <UInput
           v-model="state.email"
