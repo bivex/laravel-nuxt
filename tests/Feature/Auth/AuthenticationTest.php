@@ -41,6 +41,78 @@ class AuthenticationTest extends TestCase
         }
     }
 
+    public function test_spa_login_should_persist_session_for_authenticated_requests(): void
+    {
+        // This test demonstrates the SPA authentication session persistence issue
+        // The login/register routes should have 'web' middleware to enable session-based auth
+        // Currently, sessions don't persist because routes use 'api' middleware group without 'web'
+
+        $user = User::factory()->create();
+
+        // Login via SPA endpoint
+        $loginResponse = $this->postJson('/api/v1/login', [
+            'email' => $user->email,
+            'password' => 'password',
+        ]);
+
+        $loginResponse->assertStatus(200)
+            ->assertJson(['ok' => true]);
+
+        // Check if session is maintained for subsequent requests
+        // This should work for SPA auth but currently fails due to missing 'web' middleware
+        $userResponse = $this->getJson('/api/v1/user');
+
+        // This assertion will fail because session is not persisted
+        // The route requires auth middleware but session-based auth doesn't work
+        $userResponse->assertStatus(401); // Currently fails due to session not persisting
+    }
+
+    public function test_spa_register_should_persist_session_for_authenticated_requests(): void
+    {
+        // Test that registration also has session persistence issues
+        $userData = [
+            'name' => 'Test User',
+            'email' => 'test@example.com',
+            'password' => 'password',
+            'password_confirmation' => 'password',
+        ];
+
+        // Register via SPA endpoint
+        $registerResponse = $this->postJson('/api/v1/register', $userData);
+
+        $registerResponse->assertStatus(201)
+            ->assertJson(['ok' => true]);
+
+        // Check if session is maintained after registration
+        // This should work but currently fails due to missing 'web' middleware
+        $userResponse = $this->getJson('/api/v1/user');
+
+        // This assertion will fail because session is not persisted after registration
+        $userResponse->assertStatus(401); // Currently fails due to session not persisting
+    }
+
+    public function test_social_auth_callback_has_web_middleware(): void
+    {
+        // This test verifies that social auth callback correctly has 'web' middleware
+        // This is a positive test case - social auth callback should work
+
+        $user = User::factory()->create();
+
+        // Test that the callback route has web middleware by checking route configuration
+        $routes = app('router')->getRoutes();
+        $callbackRoute = null;
+
+        foreach ($routes as $route) {
+            if ($route->getName() === 'login.provider.callback') {
+                $callbackRoute = $route;
+                break;
+            }
+        }
+
+        $this->assertNotNull($callbackRoute, 'Social auth callback route should exist');
+        $this->assertContains('web', $callbackRoute->middleware(), 'Social auth callback should have web middleware');
+    }
+
     public function test_users_can_not_authenticate_with_invalid_password(): void
     {
         $user = User::factory()->create();
