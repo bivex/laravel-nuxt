@@ -8,7 +8,7 @@
  * https://github.com/bivex
  *
  * Created: 2025-12-25T11:27:34
- * Last Updated: 2025-12-25T11:27:58
+ * Last Updated: 2025-12-25T11:29:02
  *
  * Licensed under the MIT License.
  * Commercial licensing available upon request.
@@ -57,13 +57,13 @@ class AuthenticationTest extends TestCase
 
     public function test_spa_login_should_persist_session_for_authenticated_requests(): void
     {
-        // This test demonstrates the SPA authentication session persistence issue
-        // The login/register routes should have 'web' middleware to enable session-based auth
-        // Currently, sessions don't persist because routes use 'api' middleware group without 'web'
+        // This test verifies that SPA authentication session persistence now works
+        // The login/register routes now have 'web' middleware to enable session-based auth
+        // Sessions should persist after login for subsequent authenticated requests
 
         $user = User::factory()->create();
 
-        // Login via SPA endpoint - this should set session but currently doesn't due to missing 'web' middleware
+        // Login via SPA endpoint - should now set session due to 'web' middleware
         $loginResponse = $this->postJson('/api/v1/login', [
             'email' => $user->email,
             'password' => 'password',
@@ -72,15 +72,14 @@ class AuthenticationTest extends TestCase
         $loginResponse->assertStatus(200)
             ->assertJson(['ok' => true]);
 
-        // The issue: subsequent requests should maintain session, but they don't
-        // because login/register routes lack 'web' middleware
-        // This demonstrates the problem - session is not persisted
-        $this->assertGuest('web'); // Session-based auth should work but doesn't
+        // Now session should be maintained for subsequent requests
+        // This should work because login route now has 'web' middleware
+        $this->assertAuthenticated('web'); // Session-based auth should now work
     }
 
     public function test_spa_register_should_persist_session_for_authenticated_requests(): void
     {
-        // Test that registration also has session persistence issues
+        // Test that registration now has session persistence working
         $userData = [
             'name' => 'Test User',
             'email' => 'test@example.com',
@@ -88,16 +87,15 @@ class AuthenticationTest extends TestCase
             'password_confirmation' => 'password',
         ];
 
-        // Register via SPA endpoint - this should set session but currently doesn't due to missing 'web' middleware
+        // Register via SPA endpoint - should now set session due to 'web' middleware
         $registerResponse = $this->postJson('/api/v1/register', $userData);
 
         $registerResponse->assertStatus(201)
             ->assertJson(['ok' => true]);
 
-        // The issue: session should be maintained after registration, but it's not
-        // because register route lacks 'web' middleware
-        // This demonstrates the problem - session is not persisted
-        $this->assertGuest('web'); // Session-based auth should work but doesn't
+        // Session should now be maintained after registration
+        // This should work because register route now has 'web' middleware
+        $this->assertAuthenticated('web'); // Session-based auth should now work
     }
 
     public function test_social_auth_callback_has_web_middleware(): void

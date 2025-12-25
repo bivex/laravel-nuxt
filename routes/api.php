@@ -1,4 +1,18 @@
 <?php
+/**
+ * Copyright (c) 2025 Bivex
+ *
+ * Author: Bivex
+ * Available for contact via email: support@b-b.top
+ * For up-to-date contact information:
+ * https://github.com/bivex
+ *
+ * Created: 2025-12-25T11:28:55
+ * Last Updated: 2025-12-25T11:29:02
+ *
+ * Licensed under the MIT License.
+ * Commercial licensing available upon request.
+ */
 
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AuthController;
@@ -12,8 +26,8 @@ Route::get('/', function () {
 Route::prefix('api/v1')->group(function () {
     Route::get('login/{provider}/redirect', [AuthController::class, 'redirect'])->name('login.provider.redirect');
     Route::get('login/{provider}/callback', [AuthController::class, 'callback'])->middleware(['web'])->name('login.provider.callback');
-    Route::post('login', [AuthController::class, 'login'])->middleware(['throttle:login'])->name('login');
-    Route::post('register', [AuthController::class, 'register'])->name('register');
+    Route::post('login', [AuthController::class, 'login'])->middleware(['web', 'throttle:login'])->name('login');
+    Route::post('register', [AuthController::class, 'register'])->middleware(['web'])->name('register');
     Route::post('forgot-password', [AuthController::class, 'sendResetPasswordLink'])->middleware('throttle:5,1')->name('password.email');
     Route::post('reset-password', [AuthController::class, 'resetPassword'])->name('password.store');
     Route::post('verification-notification', [AuthController::class, 'verificationNotification'])->middleware('throttle:verification-notification')->name('verification.send');
