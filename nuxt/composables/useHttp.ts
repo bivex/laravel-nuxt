@@ -15,9 +15,24 @@
 
 import type { HttpUseFetchOptions } from '~';
 
+function createHttpComposable<T>(
+  url: string | (() => string),
+  options?: HttpUseFetchOptions<T>,
+  lazy: boolean = false,
+) {
+  return lazy ? useLazyFetch<T>(url, options as any) : useFetch<T>(url, options as any);
+}
+
 export function useHttp<T>(
   url: string | (() => string),
   options?: HttpUseFetchOptions<T>,
 ) {
-  return useFetch<T>(url, options as any);
+  return createHttpComposable<T>(url, options, false);
+}
+
+export function useLazyHttp<T>(
+  url: string | (() => string),
+  options?: HttpUseFetchOptions<T>,
+) {
+  return createHttpComposable<T>(url, options, true);
 }
