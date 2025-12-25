@@ -24,6 +24,20 @@ export default defineNuxtPlugin((nuxtApp) => {
   const xsrf = useCookie('XSRF-TOKEN');
   const auth = useAuthStore();
 
+  // Track hydration state to prevent toast hydration mismatch
+  let isHydrated = !import.meta.client;
+  if (import.meta.client) {
+    nuxtApp.hooks.hook('app:suspense:resolve', () => {
+      isHydrated = true;
+    });
+  }
+
+  function safeToast(options: Parameters<typeof toast.add>[0]) {
+    if (isHydrated) {
+      toast.add(options);
+    }
+  }
+
   function buildHeaders(headers: any): Headers {
     let authHeaders = {};
 
@@ -66,6 +80,15 @@ export default defineNuxtPlugin((nuxtApp) => {
 
   function isRequestWithAuth(baseURL: string, request: string | Request): boolean {
     const path = typeof request === 'string' ? request : request.url;
+
+    // Check if this is an API request (has our API baseURL or is a relative path to API)
+    const apiBase = config.public.apiBase;
+    const apiLocal = config.apiLocal;
+
+    if (baseURL && (baseURL.startsWith(apiBase) || baseURL.startsWith(apiLocal))) {
+      return true;
+    }
+
     return !baseURL
       && !path.startsWith('/_nuxt')
       && !path.startsWith('http://')
@@ -101,7 +124,7 @@ export default defineNuxtPlugin((nuxtApp) => {
 
       if (import.meta.server || context.error.name === 'AbortError') return;
 
-      toast.add({
+      safeToast({
         icon: 'i-heroicons-exclamation-circle-solid',
         color: "error",
         title: context.error.message ?? 'Something went wrong'
@@ -117,7 +140,7 @@ export default defineNuxtPlugin((nuxtApp) => {
         const auth = useAuthStore();
         auth.reset();
       } else if (context.response.status !== 422 && import.meta.client) {
-        toast.add({
+        safeToast({
           icon: 'i-heroicons-exclamation-circle-solid',
           color: "error",
           title: context.response._data?.message ?? context.response.statusText ?? 'Something went wrong'

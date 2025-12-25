@@ -215,6 +215,7 @@ const isSideOpen = ref(false);
             variant="ghost"
             color="neutral"
             icon="i-heroicons-bars-3"
+            aria-label="Open menu"
           />
           <template #content>
             <div class="me-5">
@@ -226,6 +227,7 @@ const isSideOpen = ref(false);
                   variant="ghost"
                   color="neutral"
                   icon="i-heroicons-x-mark-20-solid"
+                  aria-label="Close menu"
                   @click="isSideOpen = false"
                 />
               </div>

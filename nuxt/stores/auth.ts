@@ -30,7 +30,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   const user = ref(<User>{});
 
-  const { refresh: logout } = useHttp<any>('logout', {
+  const { refresh: logout } = useHttp<any>('/logout', {
     method: 'POST',
     immediate: false,
     onFetchResponse: ({ response }) => {
@@ -41,7 +41,7 @@ export const useAuthStore = defineStore('auth', () => {
     }
   });
 
-  const { refresh: fetchUser } = useHttp<any>('user', {
+  const { refresh: fetchUser } = useHttp<any>('/user', {
     immediate: false,
     onFetchResponse({ response }) {
       if (response.status === 200) {

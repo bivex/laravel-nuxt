@@ -3,7 +3,7 @@ export default defineNuxtPlugin(async (nuxtApp) => {
   const config = useRuntimeConfig();
 
   if (config.public.authGuard === 'web' && import.meta.client) {
-    auth.fetchCsrf();
+    await auth.fetchCsrf();
   }
 
   if (auth.logged) {

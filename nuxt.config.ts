@@ -32,6 +32,15 @@ export default defineNuxtConfig({
         port: 3000,
       },
     },
+    build: {
+      minify: 'terser',
+      terserOptions: {
+        compress: {
+          drop_console: true,
+          drop_debugger: true,
+        },
+      },
+    },
   },
 
   /**
@@ -53,11 +62,15 @@ export default defineNuxtConfig({
 
   app: {
     head: {
+      htmlAttrs: {
+        lang: 'en',
+      },
       title: 'Home',
       titleTemplate: '%s | LaravelNuxt Boilerplate',
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+        { name: 'description', content: 'LaravelNuxt Boilerplate - Modern full-stack application' },
         // Disable caching in development
         { 'http-equiv': 'Cache-Control', content: 'no-cache, no-store, must-revalidate' },
         { 'http-equiv': 'Pragma', content: 'no-cache' },
@@ -121,6 +134,12 @@ export default defineNuxtConfig({
 
   typescript: {
     strict: false,
+  },
+
+  build: {
+    transpile: process.env.NODE_ENV === 'production'
+      ? ['@headlessui/vue', '@heroicons/vue']
+      : [],
   },
 
   /**

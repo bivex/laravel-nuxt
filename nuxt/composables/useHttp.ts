@@ -21,10 +21,15 @@ function createHttpComposable<T>(
   lazy: boolean = false,
 ) {
   const { $http } = useNuxtApp();
+  const config = useRuntimeConfig();
+
+  const baseURL = import.meta.server
+    ? config.apiLocal + config.public.apiPrefix
+    : config.public.apiBase + config.public.apiPrefix;
 
   return lazy
-    ? useLazyFetch<T>(url, { ...options, $fetch: $http } as any)
-    : useFetch<T>(url, { ...options, $fetch: $http } as any);
+    ? useLazyFetch<T>(url, { ...options, baseURL, $fetch: $http } as any)
+    : useFetch<T>(url, { ...options, baseURL, $fetch: $http } as any);
 }
 
 export function useHttp<T>(
