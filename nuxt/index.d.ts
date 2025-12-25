@@ -1,3 +1,18 @@
+/**
+ * Copyright (c) 2025 Bivex
+ *
+ * Author: Bivex
+ * Available for contact via email: support@b-b.top
+ * For up-to-date contact information:
+ * https://github.com/bivex
+ *
+ * Created: 2025-12-25T11:55:38
+ * Last Updated: 2025-12-25T11:55:38
+ *
+ * Licensed under the MIT License.
+ * Commercial licensing available upon request.
+ */
+
 import type { NitroFetchRequest, NitroFetchOptions } from 'nitropack/types';
 import type { FetchContext, FetchOptions, FetchResponse, ResolvedFetchOptions } from 'ofetch';
 import type { UseFetchOptions } from 'nuxt/app';
@@ -45,9 +60,7 @@ interface HttpFetchContext extends FetchContext<any, any> {
   options: ResolvedFetchOptions<any, any> & HttpFetchOptions;
 }
 
-type HttpUseFetchOptions<T> = UseFetchOptions<T> & HttpFetchOptions & {
-  $fetch?: $Fetch
-};
+type HttpUseFetchOptions<T = any> = UseFetchOptions<T> & Partial<HttpFetchOptions>;
 
 
 export {

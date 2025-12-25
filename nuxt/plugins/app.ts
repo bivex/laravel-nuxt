@@ -1,3 +1,18 @@
+/**
+ * Copyright (c) 2025 Bivex
+ *
+ * Author: Bivex
+ * Available for contact via email: support@b-b.top
+ * For up-to-date contact information:
+ * https://github.com/bivex
+ *
+ * Created: 2025-12-25T11:50:49
+ * Last Updated: 2025-12-25T11:55:37
+ *
+ * Licensed under the MIT License.
+ * Commercial licensing available upon request.
+ */
+
 import type { NitroFetchRequest } from 'nitropack/types';
 import type { HttpFetchOptions, HttpFetchContext } from '~';
 
@@ -49,7 +64,8 @@ export default defineNuxtPlugin((nuxtApp) => {
     }
   }
 
-  function isRequestWithAuth(baseURL: string, path: string): boolean {
+  function isRequestWithAuth(baseURL: string, request: string | Request): boolean {
+    const path = typeof request === 'string' ? request : request.url;
     return !baseURL
       && !path.startsWith('/_nuxt')
       && !path.startsWith('http://')
@@ -72,7 +88,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     async onRequest(context: HttpFetchContext) {
       await callHooks(context, context.options.onFetch);
 
-      if (!isRequestWithAuth(context.options.baseURL ?? '', context.request.toString())) return;
+      if (!isRequestWithAuth(context.options.baseURL ?? '', context.request)) return;
 
       context.options.credentials = 'include';
       context.options.baseURL = buildBaseURL(context.options.baseURL ?? '');
