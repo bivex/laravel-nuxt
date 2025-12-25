@@ -26,8 +26,6 @@ export default defineNuxtConfig({
     server: {
       allowedHosts: ["localhost", "127.0.0.1"],
       https: false,
-      host: 'localhost',
-      port: 3000,
       hmr: {
         protocol: 'ws',
         host: 'localhost',
@@ -61,9 +59,9 @@ export default defineNuxtConfig({
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
         // Disable caching in development
-        process.dev ? { 'http-equiv': 'Cache-Control', content: 'no-cache, no-store, must-revalidate' } : {},
-        process.dev ? { 'http-equiv': 'Pragma', content: 'no-cache' } : {},
-        process.dev ? { 'http-equiv': 'Expires', content: '0' } : {},
+        { 'http-equiv': 'Cache-Control', content: 'no-cache, no-store, must-revalidate' },
+        { 'http-equiv': 'Pragma', content: 'no-cache' },
+        { 'http-equiv': 'Expires', content: '0' },
       ].filter(Boolean),
       link: [
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
@@ -102,9 +100,6 @@ export default defineNuxtConfig({
       crossOriginEmbedderPolicy: 'unsafe-none',
       crossOriginOpenerPolicy: 'same-origin-allow-popups',
       // Prevent HTTPS redirects in development
-      ...(process.dev && {
-        'Strict-Transport-Security': 'max-age=0',
-      }),
       contentSecurityPolicy: {
         "default-src": ["'self'"],
         "img-src": ["'self'", "data:", "blob:", "http://localhost:3000", "http://localhost:8000", import.meta.env.APP_URL || 'http://127.0.0.1:8000'],
@@ -112,9 +107,7 @@ export default defineNuxtConfig({
         "script-src": ["'self'", "'unsafe-inline'", "'unsafe-eval'", "http://localhost:3000"],
         "style-src": ["'self'", "'unsafe-inline'", "http://localhost:3000"],
         "font-src": ["'self'", "http://localhost:3000"],
-        ...(process.dev && {
-          "upgrade-insecure-requests": null, // Disable upgrade to HTTPS
-        }),
+        "upgrade-insecure-requests": null, // Disable upgrade to HTTPS
       },
     },
   },
