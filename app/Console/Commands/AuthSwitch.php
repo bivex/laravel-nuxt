@@ -66,7 +66,7 @@ class AuthSwitch extends Command
     {
         $contentReplaced = file_get_contents($path);
 
-        if (!preg_match('@' . preg_quote($pattern) . '@', $content)) {
+        if (!preg_match('@' . preg_quote($pattern) . '@', $contentReplaced)) {
             $this->fail('Pattern not found in ' . $path);
         }
 

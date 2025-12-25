@@ -20,9 +20,9 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UploadController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return ['ok' => true, 'message' => 'Welcome to the API'];
-});
+Route::get('/ping', function () {
+    return response()->json(['ok' => true, 'message' => 'API is working']);
+})->middleware([]);
 
 Route::prefix('api/v1')->group(function () {
     Route::get('login/{provider}/redirect', [AuthController::class, 'redirect'])->middleware(['web'])->name('login.provider.redirect');

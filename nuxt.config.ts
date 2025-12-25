@@ -7,7 +7,7 @@
  * https://github.com/bivex
  *
  * Created: 2025-12-25T11:37:28
- * Last Updated: 2025-12-25T12:05:51
+ * Last Updated: 2025-12-25T12:23:31
  *
  * Licensed under the MIT License.
  * Commercial licensing available upon request.
@@ -29,7 +29,7 @@ export default defineNuxtConfig({
       hmr: {
         protocol: 'ws',
         host: 'localhost',
-        port: 3001,
+        port: 3000,
       },
     },
   },
@@ -102,11 +102,11 @@ export default defineNuxtConfig({
       // Prevent HTTPS redirects in development
       contentSecurityPolicy: {
         "default-src": ["'self'"],
-        "img-src": ["'self'", "data:", "blob:", "http://localhost:3001", "http://localhost:8000", import.meta.env.APP_URL || 'http://127.0.0.1:8000'],
-        "connect-src": ["'self'", "ws://localhost:3001", "http://localhost:3001", "http://localhost:8000", import.meta.env.APP_URL || 'http://127.0.0.1:8000'],
-        "script-src": ["'self'", "'unsafe-inline'", "'unsafe-eval'", "http://localhost:3001"],
-        "style-src": ["'self'", "'unsafe-inline'", "http://localhost:3001"],
-        "font-src": ["'self'", "http://localhost:3001"],
+        "img-src": ["'self'", "data:", "blob:", "http://localhost:3000", "http://localhost:8000", import.meta.env.APP_URL || 'http://127.0.0.1:8000'],
+        "connect-src": ["'self'", "ws://localhost:3000", "http://localhost:3000", "http://localhost:8000", import.meta.env.APP_URL || 'http://127.0.0.1:8000'],
+        "script-src": ["'self'", "'unsafe-inline'", "'unsafe-eval'", "http://localhost:3000"],
+        "style-src": ["'self'", "'unsafe-inline'", "http://localhost:3000"],
+        "font-src": ["'self'", "http://localhost:3000"],
         "upgrade-insecure-requests": null, // Disable upgrade to HTTPS
       },
     },
