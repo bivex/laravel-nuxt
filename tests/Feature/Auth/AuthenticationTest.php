@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright (c) 2025 Bivex
  *
@@ -42,12 +43,12 @@ class AuthenticationTest extends TestCase
 
         if ($guard === 'api') {
             $response->assertJson(
-                fn(AssertableJson $json) => $json
+                fn (AssertableJson $json) => $json
                     ->hasAll(['ok', 'token'])
             );
         } else {
             $response->assertJson(
-                fn(AssertableJson $json) => $json
+                fn (AssertableJson $json) => $json
                     ->has('ok')
                     ->where('ok', true)
                     ->missing('token')
@@ -174,7 +175,7 @@ class AuthenticationTest extends TestCase
         ]);
 
         $response->assertJson(
-            fn(AssertableJson $json) => $json
+            fn (AssertableJson $json) => $json
                 ->hasAll(['ok', 'message', 'errors'])
                 ->where('ok', false)
                 ->missing('token')

@@ -7,9 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class Session extends Model
 {
     protected $primaryKey = 'id';
+
     protected $keyType = 'string';
 
     public $timestamps = false;
+
     public $incrementing = false;
 
     protected $casts = [
