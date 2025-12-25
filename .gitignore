@@ -54,3 +54,7 @@ logs
 !.env.example
 rr
 .rr.yaml
+
+.scannerwork/
+
+sonar-project.properties
