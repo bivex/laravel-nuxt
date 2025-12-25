@@ -1,3 +1,18 @@
+/**
+ * Copyright (c) 2025 Bivex
+ *
+ * Author: Bivex
+ * Available for contact via email: support@b-b.top
+ * For up-to-date contact information:
+ * https://github.com/bivex
+ *
+ * Created: 2025-12-25T11:37:28
+ * Last Updated: 2025-12-25T11:39:05
+ *
+ * Licensed under the MIT License.
+ * Commercial licensing available upon request.
+ */
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-19',
@@ -10,6 +25,14 @@ export default defineNuxtConfig({
   vite: {
     server: {
       allowedHosts: ["localhost", "127.0.0.1"],
+      https: false,
+      host: 'localhost',
+      port: 3000,
+      hmr: {
+        protocol: 'ws',
+        host: 'localhost',
+        port: 3001,
+      },
     },
   },
 
@@ -37,7 +60,11 @@ export default defineNuxtConfig({
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      ],
+        // Disable caching in development
+        process.dev ? { 'http-equiv': 'Cache-Control', content: 'no-cache, no-store, must-revalidate' } : {},
+        process.dev ? { 'http-equiv': 'Pragma', content: 'no-cache' } : {},
+        process.dev ? { 'http-equiv': 'Expires', content: '0' } : {},
+      ].filter(Boolean),
       link: [
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
       ],
@@ -74,8 +101,20 @@ export default defineNuxtConfig({
     headers: {
       crossOriginEmbedderPolicy: 'unsafe-none',
       crossOriginOpenerPolicy: 'same-origin-allow-popups',
+      // Prevent HTTPS redirects in development
+      ...(process.dev && {
+        'Strict-Transport-Security': 'max-age=0',
+      }),
       contentSecurityPolicy: {
-        "img-src": ["'self'", "data:", "https://*", import.meta.env.APP_URL || 'http://127.0.0.1:8000'],
+        "default-src": ["'self'"],
+        "img-src": ["'self'", "data:", "blob:", "http://localhost:3000", "http://localhost:8000", import.meta.env.APP_URL || 'http://127.0.0.1:8000'],
+        "connect-src": ["'self'", "ws://localhost:3001", "http://localhost:3000", "http://localhost:8000", import.meta.env.APP_URL || 'http://127.0.0.1:8000'],
+        "script-src": ["'self'", "'unsafe-inline'", "'unsafe-eval'", "http://localhost:3000"],
+        "style-src": ["'self'", "'unsafe-inline'", "http://localhost:3000"],
+        "font-src": ["'self'", "http://localhost:3000"],
+        ...(process.dev && {
+          "upgrade-insecure-requests": null, // Disable upgrade to HTTPS
+        }),
       },
     },
   },

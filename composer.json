@@ -19,6 +19,8 @@
         "league/flysystem-aws-s3-v3": "^3.24",
         "matomo/device-detector": "^6.4",
         "spatie/laravel-permission": "^6.4",
+        "spiral/roadrunner-cli": "^2.6.0",
+        "spiral/roadrunner-http": "^3.3.0",
         "symfony/filesystem": "^7.2"
     },
     "require-dev": {
